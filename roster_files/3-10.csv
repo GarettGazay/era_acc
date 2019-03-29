@@ -1,0 +1,2 @@
+fname,lname,phone,male,female,dob,start_address,end_address,pickup_time,return_time,start_date,end_date,diag_code,medicaid,round_trip,weekdays,notes,pat_street,pat_city,pat_state,pat_zip,condition,driver_name_1,driver_name_2
+Steve,Flores****,4089036808,x,,01/15/1967,1332 Lick Ave San Jose CA 95110,2101 Alexian Dr San Jose CA 95116,07:00,08:00,2019-03-10,2019-03-10,Z89.512,93186763C,y,SAT-SUN,SC360907 J20181221 - J20190125,1332 Lick Ave,San Jose,CA,95110,Whl,Ahmed Yusuf,Ahmed Yusuf

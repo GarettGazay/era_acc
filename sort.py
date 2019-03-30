@@ -1,6 +1,7 @@
 import csv
 import glob
 import re
+import time
 
 #////////////////////////////////////////
 
@@ -22,11 +23,13 @@ for i in path:
                 era_data.append(row)
 # print(era_data[0])
 # exit()
-
+print('####### ',i,' #######')
+time.sleep(1)
 # Remove all milage data from era_data list
 for line in era_data:
     if line[4] == 'A0380':
         era_data.remove(line)
+
 
 # Format dates
 for line in era_data:
@@ -63,7 +66,7 @@ for line in roster_data:
 
 # Compare roster_data to era_data (names and dates to include drivers)
 # Submit final era_data into final_list for writing to file
-final_list = []
+
 # Write result to file
 with open('output/era_trips.csv','w', newline='') as new_file:
     csv_writer = csv.writer(new_file, delimiter=',')
@@ -87,7 +90,33 @@ with open('output/era_trips.csv','w', newline='') as new_file:
             e_last = re.sub(r' ','', e_last)
             e_date = j[1]
             e_date = re.sub(r' ','', e_date)
-            if r_first[:3] == e_first[:3] and r_last[:3] == e_last[:3] and r_date == e_date:
-                print('date match for: ',r_date)
 
-                csv_writer.writerow([e_first+' '+e_last,j[1],j[2],j[3],j[4],j[5],'',j[7],r_driver1,r_driver2 ])
+            # Remove all special characters from strings
+            r_first = re.sub('[^A-Za-z0-9]+', '', r_first)
+            r_last = re.sub('[^A-Za-z0-9]+', '', r_last)
+            e_first = re.sub('[^A-Za-z0-9]+', '', e_first)
+            e_last = re.sub('[^A-Za-z0-9]+', '', e_last)
+
+            # Re spell certain names
+            if r_last == "cortez" and r_first == 'augstin':
+                r_last = 'cortes'
+                r_first = 'agustin'
+
+            if r_last == 'conseco':
+                r_last = 'canseco'
+
+
+
+            # If no special cases check for normal length names
+            if r_first[:3] == e_first[:3] and r_last[:3] == e_last[:3] and r_date == e_date:
+                csv_writer.writerow([e_last+' '+e_first,j[1],j[2],j[3],j[4],j[5],'',j[7],r_driver1,r_driver2, ])
+                print('written to file: ', j)
+
+            # check for particularly troublesome names
+            if r_first[:2] == 'an' and r_last[:2] == 'to' and e_first[:2] == 'an' and e_last[:2] == 'to' and r_date == e_date:
+                csv_writer.writerow([e_last+' '+e_first,j[1],j[2],j[3],j[4],j[5],'',j[7],r_driver1,r_driver2, ])
+                print('special case: ',r_first,r_last ,' and ', e_first,e_last)
+
+            if  r_first[:2] == 'fe' and r_last[:3] == 'rod' and e_first[:2] == 'fe' and e_last[:3] == 'rod' and r_date == e_date:
+                csv_writer.writerow([e_last+' '+e_first,j[1],j[2],j[3],j[4],j[5],'',j[7],r_driver1,r_driver2, ])
+                print('special case: ',r_first,r_last ,' and ', e_first,e_last)
